@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script src="${request.contextPath}/statics/jquery-1.7.1.js" type="text/javascript"></script>
+    <title>用户订单详情</title>
+</head>
+<input id="orderNo" value="${orderNo}" type="hidden" />
+<body>
+
+    <div id="infoNo">
+        <strong>查到暂无该订单详情</strong>
+    </div>
+
+    <div id="infoYes">
+        <strong>当前订单编码3232：</strong><span class="currOrderNo"></span><br/><br/>
+        <strong>订单用户ID-2：</strong><span class="currUserId"></span><br/><br/>
+        <strong>是否有效(1=是；0=否)-2：</strong><span class="currActive"></span><br/><br/>
+        <strong>创建订单时间-2：</strong><span class="currOrderTime"></span><br/>
+    </div>
+
+</body>
+<script>
+
+    $(function () {
+        var orderNo=$('#orderNo').val();
+
+        var url='http://localhost:9099/middleware/user/order/info';
+        $.get(url,{
+            orderNo: orderNo
+        },function (res) {
+            console.log(res);
+
+            if(res.data==null){
+                $('#infoYes').attr('hidden','hidden');
+
+            }else{
+                $('#infoNo').attr('hidden','hidden');
+
+                $('.currOrderNo').html(res.data.orderNo);
+                $('.currUserId').html(res.data.userId);
+                $('.currActive').html(res.data.isActive);
+                $('.currOrderTime').html(res.data.createTime);
+            }
+        });
+
+    });
+
+</script>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
