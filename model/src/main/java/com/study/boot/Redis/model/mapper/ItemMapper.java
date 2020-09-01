@@ -1,7 +1,9 @@
 package com.study.boot.Redis.model.mapper;
 
 import com.study.boot.Redis.model.entity.Item;
+import org.apache.ibatis.annotations.Mapper;
 
+@Mapper
 public interface ItemMapper {
     int deleteByPrimaryKey(Integer id);
 
