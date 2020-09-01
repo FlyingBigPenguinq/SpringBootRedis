@@ -19,7 +19,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  **/
 @SpringBootApplication
 @ImportResource("classpath:/spring/spring-jdbc.xml")
-@MapperScan("com.study.boot.redis.model.mapper")
+@MapperScan("com.study.boot.Redis.model.mapper")
 @EnableScheduling
 @EnableCaching
 @EnableAsync

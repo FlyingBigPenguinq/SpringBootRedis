@@ -7,20 +7,12 @@
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.study.boot.Redis.model.entity.Item">
-    <result column="content" jdbcType="LONGVARCHAR" property="content" />
-  </resultMap>
   <sql id="Base_Column_List">
     id, code, name, create_time
   </sql>
-  <sql id="Blob_Column_List">
-    content
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
     from item
     where id = #{id,jdbcType=INTEGER}
   </select>
@@ -30,11 +22,11 @@
   </delete>
   <insert id="insert" parameterType="com.study.boot.Redis.model.entity.Item">
     insert into item (id, code, name, 
-      create_time, content)
+      create_time)
     values (#{id,jdbcType=INTEGER}, #{code,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.study.boot.Redis.model.entity.Item">
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" parameterType="com.study.boot.Redis.model.entity.Item">
     insert into item
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -48,9 +40,6 @@
       </if>
       <if test="createTime != null">
         create_time,
-      </if>
-      <if test="content != null">
-        content,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -66,12 +55,9 @@
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="content != null">
-        #{content,jdbcType=LONGVARCHAR},
-      </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.study.boot.Redis.model.entity.Item">
+  <update id="updateByPrimaryKeySelective" useGeneratedKeys="true" keyProperty="id" parameterType="com.study.boot.Redis.model.entity.Item">
     update item
     <set>
       <if test="code != null">
@@ -83,9 +69,6 @@
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="content != null">
-        content = #{content,jdbcType=LONGVARCHAR},
-      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -94,7 +77,6 @@
     set code = #{code,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      content = #{content,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.study.boot.Redis.model.entity.Item">
