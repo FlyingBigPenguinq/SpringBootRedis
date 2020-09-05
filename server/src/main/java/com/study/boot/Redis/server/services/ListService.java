@@ -1,6 +1,8 @@
 package com.study.boot.Redis.server.services;
 
+import com.study.boot.Redis.model.entity.Notice;
 import com.study.boot.Redis.model.entity.Product;
+import com.study.boot.Redis.model.mapper.NoticeMapper;
 import com.study.boot.Redis.model.mapper.ProductMapper;
 import com.study.boot.Redis.server.enums.Constant;
 import org.slf4j.Logger;
@@ -28,6 +30,9 @@ public class ListService {
     private ProductMapper productMapper;
 
     @Autowired
+    private NoticeMapper noticeMapper;
+
+    @Autowired
     private RedisTemplate redisTemplate;
 
     @Transactional(rollbackFor = Exception.class)
@@ -45,8 +50,20 @@ public class ListService {
     public List<Product> getHistoryProducts(final Integer userId){
         final String key = Constant.RedisListPrefix + userId;
         ListOperations listOperations = redisTemplate.opsForList();
-        List<Product> resList = new LinkedList<>();
+        List<Product> resList;
         resList = listOperations.range(key,0L, listOperations.size(key));
         return resList;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public Integer pushNotice(Notice notice){
+        notice.setId(null);
+        Integer res = noticeMapper.insertSelective(notice);
+        if (res > 0){
+            ListOperations<String, Notice> listOperations = redisTemplate.opsForList();
+            //向缓存内的消息队列添加消息
+            listOperations.leftPush(Constant.RedisListNoticeKey, notice);
+        }
+        return 1;
     }
 }
