@@ -23,4 +23,6 @@ public interface ArticleMapper {
     int updatePraiseTotal(@Param("articleId") Integer articleId, @Param("flag") Integer flag);
 
     Article selectByPK(@Param("articleId") Integer articleId);
+
+    String selectNameById(@Param(("userIds")) String userIds);
 }

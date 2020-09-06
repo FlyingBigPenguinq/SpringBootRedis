@@ -90,4 +90,8 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <delete id="cancelPraise">
+    delete from  article_praise
+    where article_id = #{articleId} and user_id = #{userId}
+  </delete>
 </mapper>

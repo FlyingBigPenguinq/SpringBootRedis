@@ -138,4 +138,26 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectAll" resultMap="com.study.boot.Redis.model.entity.Article">
+    select a.*,b.name as userName from
+    article as a left join 'user' as b
+    on a.user_id = b.id
+    where a.is_active = 1
+    order by a.create_time desc
+  </select>
+
+  <update id="updatePraiseTotal">
+    update article
+    set praise_total = praise_total + #{flag},
+    update_time = now()
+    where is_active = 1 and id = #{articleId}
+  </update>
+
+  <select id="selectByPK" resultMap="com.study.boot.Redis.model.entity.Article">
+    select a.*,b.name as userName from
+    article as a left join 'user' as b
+    on a.user_id = b.id
+    where a.is_active = 1 and a.id = #{articleId}
+  </select>
 </mapper>
